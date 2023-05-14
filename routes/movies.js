@@ -46,8 +46,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params
-    const movie = await pool.query('delete from movies where id = $1', [id])
-    console.log(movie)
+    await pool.query('delete from movies where id = $1', [id])
     res.status(200).json({ message: 'Deleted Successfully' })
   } catch (err) {
     console.error(err)

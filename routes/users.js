@@ -44,7 +44,13 @@ router.put('/:id', authenticateToken, async (req, res) => {
 })
 
 router.delete('/:id', authenticateToken, async (req, res) => {
-
+  try {
+    const { id } = req.params
+    await pool.query('delete from movies where id = $1', [id])
+    res.status(200).json({ message: 'Deleted Successfully' })
+  } catch (err) {
+    console.error(err)
+  }
 })
 
 module.exports = router
