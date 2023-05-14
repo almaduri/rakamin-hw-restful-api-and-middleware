@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
 
-// const jwt = require('jsonwebtoken')
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 const moviesRouter = require('./routes/movies')
 const usersRouter = require('./routes/users')
