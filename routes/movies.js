@@ -26,14 +26,21 @@ router.post('/', async (req, res) => {
   try {
     const { title, genres, year } = req.body
     await pool.query('insert into movies (title, genres, year) values ($1, $2, $3)', [title, genres, year])
-    res.sendStatus(201)
+    res.status(200).json({ message: 'Added Successfully' })
   } catch (err) {
     console.error(err)
   }
 })
 
-router.put('/:id', async (req, res) => {
-
+router.put('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { title, genres, year } = req.body
+    await pool.query('update movies set title = $1, genres = $2, year = $3 where id = $4', [title, genres, year, id])
+    res.status(200).json({ message: 'Updated Successfully' })
+  } catch {
+    console.error(err)
+  }
 })
 
 router.delete('/:id', async (req, res) => {
