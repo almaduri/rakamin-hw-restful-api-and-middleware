@@ -22,15 +22,21 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
-  
+router.post('/', authenticateToken, async (req, res) => {
+  try {
+    const { email, gender, password, role } = req.body
+    await pool.query('insert into users (email, gender, password, role) values ($1, $2, $3, $4)', [email, gender, password, role])
+    res.status(200).json({ message: 'Added Successfully' })
+  } catch (err) {
+    console.error(err)
+  }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
 
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
 
 })
 
