@@ -33,7 +33,14 @@ router.post('/', authenticateToken, async (req, res) => {
 })
 
 router.put('/:id', authenticateToken, async (req, res) => {
-
+  try {
+    const { id } = req.params
+    const { email, gender, password, role } = req.body
+    await pool.query('update users set email = $1, gender = $2, password = $3, role = $4 where id = $5', [email, gender, password, role, id])
+    res.status(200).json({ message: 'Updated Successfully' })
+  } catch {
+    console.error(err)
+  }
 })
 
 router.delete('/:id', authenticateToken, async (req, res) => {
