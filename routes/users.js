@@ -103,7 +103,16 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Users'
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *              gender:
+ *                type: string
+ *              password:
+ *                type: string
+ *              role:
+ *                type: string
  *    security:
  *      - bearerAuth: []
  *    responses:

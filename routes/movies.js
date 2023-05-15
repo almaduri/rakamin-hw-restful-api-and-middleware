@@ -216,7 +216,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { title, genres, year } = req.body
     await pool.query('insert into movies (title, genres, year) values ($1, $2, $3)', [title, genres, year])
