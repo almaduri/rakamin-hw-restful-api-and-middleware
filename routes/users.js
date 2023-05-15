@@ -5,7 +5,9 @@ const authenticateToken = require('../middleware/authenticateToken')
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const users = await pool.query('select * from users')
+    const { page, limit } = req.query
+    const offset = (page - 1) * limit
+    const users = await pool.query('select * from users limit $1 offset $2', [limit, offset])
     res.status(200).json(users.rows)
   } catch (err) {
     console.error(err)
