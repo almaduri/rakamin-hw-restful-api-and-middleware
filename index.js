@@ -1,9 +1,11 @@
 const express = require('express')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
+const morgan = require('morgan')
 
 const app = express()
 
+app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
