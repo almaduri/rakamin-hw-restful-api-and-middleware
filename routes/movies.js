@@ -1,3 +1,174 @@
+/**
+ * @swagger
+ * components:
+ *  securitySchemes:
+ *    bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerformat: JWT
+ *  schemas:
+ *    Movies:
+ *      type: object
+ *      required:
+ *        - title
+ *        - genres
+ *        - year
+ *      properties:
+ *        id:
+ *          type: string
+ *          description: The auto-generated id of the movie
+ *        title:
+ *          type: string
+ *          description: The title of the movie
+ *        genres:
+ *          type: string
+ *          description: The genres of the movie
+ *        year:
+ *          type: string
+ *          description: The year of the movie
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Movies
+ *  description: Movies managing API
+ * /movies:
+ *  get:
+ *    summary: Get all movies
+ *    tags: [Movies]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: query
+ *        name: page
+ *        schema:
+ *          type: string
+ *        description: Page
+ *      - in: query
+ *        name: limit
+ *        schema:
+ *          type: string
+ *        description: Limit
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Movies'
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Movies
+ *  description: Movies managing API
+ * /movies/{id}:
+ *  get:
+ *    summary: Get movie by id
+ *    tags: [Movies]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        description: ID of the movie to get
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Movies'
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Movies
+ *  description: Movies managing API
+ * /movies:
+ *  post:
+ *    summary: Add new movie
+ *    tags: [Movies]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Movies'
+ *    security:
+ *      - bearerAuth: []
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Movies'
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Movies
+ *  description: Movies managing API
+ * /movies/{id}:
+ *  put:
+ *    summary: Edit movie by id
+ *    tags: [Movies]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Movies'
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        description: ID of the movie to get
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Movies'
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Movies
+ *  description: Movies managing API
+ * /movies/{id}:
+ *  delete:
+ *    summary: Delete movie by id
+ *    tags: [Movies]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        description: ID of the movie to get
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Movies'
+ */
+
 const express = require('express')
 const router = express.Router()
 const pool = require('../db')
@@ -6,8 +177,15 @@ const authenticateToken = require('../middleware/authenticateToken')
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const { page, limit } = req.query
-    const offset = (page - 1) * limit
-    const movies = await pool.query('select * from movies limit $1 offset $2', [limit, offset])
+    let movies
+    if (page && limit) {
+      const offset = (page - 1) * limit
+      movies = await pool.query('select * from movies limit $1 offset $2', [limit, offset])
+    } else if (limit) {
+      movies = await pool.query('select * from movies limit $1', [limit])
+    } else {
+      movies = await pool.query('select * from movies')
+    }
     res.status(200).json(movies.rows)
   } catch (err) {
     console.error(err)
