@@ -99,7 +99,14 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Movies'
+ *            type: object
+ *            properties:
+ *              title:
+ *                type: string
+ *              genres:
+ *                type: string
+ *              year:
+ *                type: string
  *    security:
  *      - bearerAuth: []
  *    responses:
