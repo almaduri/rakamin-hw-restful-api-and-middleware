@@ -15,7 +15,7 @@
  *        - year
  *      properties:
  *        id:
- *          type: string
+ *          type: integer
  *          description: The auto-generated id of the movie
  *        title:
  *          type: string
@@ -125,7 +125,14 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Movies'
+ *            type: object
+ *            properties:
+ *              title:
+ *                type: string
+ *              genres:
+ *                type: string
+ *              year:
+ *                type: string
  *    security:
  *      - bearerAuth: []
  *    parameters:
