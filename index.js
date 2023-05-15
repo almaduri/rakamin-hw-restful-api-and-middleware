@@ -5,7 +5,7 @@ const morgan = require('morgan')
 
 const app = express()
 
-app.use(morgan('tiny'))
+app.use(morgan('common'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
