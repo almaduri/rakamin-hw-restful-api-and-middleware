@@ -16,7 +16,7 @@
  *        - role
  *      properties:
  *        id:
- *          type: string
+ *          type: integer
  *          description: The auto-generated id of the user
  *        email:
  *          type: string
